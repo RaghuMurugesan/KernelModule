@@ -70,6 +70,7 @@ void cleanup_module(void)
      * Unregister the device 
      */
     unregister_chrdev(Major, DEVICE_NAME);
+    printk(KERN_ALERT "unregister_chrdev");
 }
 
 /*
