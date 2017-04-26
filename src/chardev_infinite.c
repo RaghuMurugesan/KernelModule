@@ -8,6 +8,17 @@
 #include <linux/fs.h>
 #include <asm/uaccess.h>    /* for put_user */
 
+
+#define MAKE_RECURSIVE_CALL 1
+#define RETUN_FRM_RECURSIVE_CALL -1
+#define RECURSION_DEPTH_MAX 10
+#define RECURSION_DEPTH_MIN 5
+
+static int recursive_flow_ctrl = MAKE_RECURSIVE_CALL;
+static int recursion_depth = 0;
+
+static void make_recursion(void);
+
 /*  
  *  Prototypes - this would normally go in a .h file
  */
@@ -163,6 +174,41 @@ static ssize_t
 device_write(struct file *filp, const char *buff, size_t len, loff_t * off)
 {
 	while(1) {} /* THE INIFITE LOOP ATOM BOMB WILL BE TRIGERRED UPON WRITE ATTEMPTS */
-    printk(KERN_ALERT "Sorry, this operation isn't supported.\n");
+	printk(KERN_INFO "GONNA MAKE INFINITE O(1) memory recursuion\n");
+	make_recursion();
+	printk(KERN_INFO "END OF RECURSION : UNEXPECTED !!!!!!!!!!!!!!!!!!!!!!!!!\n");
+	printk(KERN_ALERT "Sorry, this operation isn't supported.\n");
+	printk(KERN_ALERT "Sorry, this operation isn't supported.\n");
     return -EINVAL;
+}
+
+
+
+
+static void make_recursion(void)
+{
+/*
+ * static int recursive_flow_ctrl = MAKE_RECURSIVE_CALL;
+ * static int recursion_depth = 0;
+ *
+ * static void make_recursion(void);
+ * #define MAKE_RECURSIVE_CALL 1
+ * #define RETUN_FRM_RECURSIVE_CALL -1
+ * #define RECURSION_DEPTH_MAX 10
+ * #define RECURSION_DEPTH_MIN 5
+ */
+
+
+	recursion_depth++;
+	if (recursion_depth > RECURSION_DEPTH_MAX) {
+		return;
+	} else {
+recursion_reset:
+		make_recursion();
+	}
+	recursion_depth--;
+	if (recursion_depth < RECURSION_DEPTH_MIN) {
+		goto recursion_reset;
+	}
+	return;
 }
