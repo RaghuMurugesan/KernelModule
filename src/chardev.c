@@ -102,7 +102,7 @@ static int device_open(struct inode *inode, struct file *file)
 static int device_release(struct inode *inode, struct file *file)
 {
     Device_Open--;        /* We're now ready for our next caller */
-
+    printk(KERN_EMERG ">>>>>>> DEVICE RELEASE");
     /* 
      * Decrement the usage count, or else once you opened the file, you'll
      * never get get rid of the module. 

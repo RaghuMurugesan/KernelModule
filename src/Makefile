@@ -6,6 +6,7 @@ obj-m += hello-5.o
 obj-m += chardev.o
 obj-m += chardev_infinite.o
 obj-m += startstop.o
+obj-m += procfs1.o
 
 startstop-objs := start.o stop.o
 
