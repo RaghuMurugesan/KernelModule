@@ -88,14 +88,13 @@ int init_module()
 	Our_Proc_File = create_proc_entry(procfs_name, 0644, NULL);
 
 	if (Our_Proc_File == NULL) {
-		remove_proc_entry(procfs_name, &proc_root);
+		remove_proc_entry(procfs_name, NULL);
 		printk(KERN_ALERT "Error: Could not initialize /proc/%s\n",
 		       procfs_name);
 		return -ENOMEM;
 	}
 
 	Our_Proc_File->read_proc = procfile_read;
-	Our_Proc_File->owner 	 = THIS_MODULE;
 	Our_Proc_File->mode 	 = S_IFREG | S_IRUGO;
 	Our_Proc_File->uid 	 = 0;
 	Our_Proc_File->gid 	 = 0;
@@ -107,6 +106,6 @@ int init_module()
 
 void cleanup_module()
 {
-	remove_proc_entry(procfs_name, &proc_root);
+	remove_proc_entry(procfs_name, NULL);
 	printk(KERN_INFO "/proc/%s removed\n", procfs_name);
 }
